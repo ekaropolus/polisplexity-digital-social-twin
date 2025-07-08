@@ -1,0 +1,65 @@
+# Environment files
+*.env
+*.venv
+*.temp
+.venv/
+env/
+env.fish
+venv_creation.log
+uv
+uv.lock
+uvx
+
+# Python cache
+__pycache__/
+*.py[oc]
+
+# Gradle, Kotlin, Java
+.gradle
+build/
+.kotlin
+out/
+bin/
+
+# Intellij / Eclipse / VS Code / NetBeans
+.idea/
+*.iws
+*.iml
+*.ipr
+.vscode/
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings/
+.springBeans
+.sts4-cache
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# Mac / Windows
+.DS_Store
+Thumbs.db
+
+# Node
+node_modules/
+.output
+.vercel
+.netlify
+.wrangler
+/.svelte-kit
+/build
+
+# Svelte/Vite
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+
+# Exceptions: example env
+!.env.example
+!.env.test
+
+# Local socket / test helpers
+socketio.js

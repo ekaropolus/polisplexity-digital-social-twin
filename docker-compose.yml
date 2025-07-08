@@ -1,0 +1,36 @@
+version: '3.8'
+services:
+  coral-server:
+    image: eclipse-temurin:17-jdk
+    container_name: coral-server
+    working_dir: /app
+    volumes:
+      - ./coral-server:/app
+    command: ./gradlew run
+    ports:
+      - "5555:5555"
+    restart: unless-stopped
+
+  coral-studio:
+    image: node:20-alpine
+    container_name: coral-studio
+    working_dir: /app
+    volumes:
+      - ./coral-studio:/app
+    command: sh -c "yarn install && yarn dev --host --port 3010"
+    ports:
+      - "3010:3010"
+    restart: unless-stopped
+
+  interface-agent:
+    build:
+      context: ./coral-agents/interface-agent
+      dockerfile: Dockerfile
+    container_name: interface-agent
+    env_file:
+      - ./coral-agents/interface-agent/.env
+    depends_on:
+      - coral-server
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
