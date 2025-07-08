@@ -1,0 +1,122 @@
+# Default application configuration
+applications:
+  - id: "app"
+    name: "Default Application"
+    description: "Default application for testing"
+    privacyKeys:
+      - "default-key"
+      - "public"
+      - "priv"
+
+# Registry of agents we can orchestrate
+registry:
+  test:
+    options:
+      - name: "NAME"
+        type: "string"
+        description: "Test agent name"
+    runtime:
+      type: "executable"
+      command:
+        - bash
+        - examples/camel-search-maths/venv.sh
+        - examples/camel-search-maths/test.py
+      environment:
+        - option: "NAME"
+
+  search:
+    options:
+      - name: "OPENAI_API_KEY"
+        type: "string"
+        description: "OpenAI API Key"
+      - name: "GOOGLE_API_KEY"
+        type: "string"
+        description: "Google API Key"
+      - name: "SEARCH_ENGINE_ID"
+        type: "string"
+        description: "Google Search Engine ID"
+    runtime:
+      type: "executable"
+      command:
+        - bash
+        - examples/camel-search-maths/venv.sh
+        - examples/camel-search-maths/mcp_example_camel_search.py
+      environment:
+        - name: "API_KEY"
+          from: "OPENAI_API_KEY"
+        - option: "GOOGLE_API_KEY"
+        - option: "SEARCH_ENGINE_ID"
+
+  math:
+    options:
+      - name: "OPENAI_API_KEY"
+        type: "string"
+        description: "OpenAI API Key"
+    runtime:
+      type: "executable"
+      command:
+        - bash
+        - examples/camel-search-maths/venv.sh
+        - examples/camel-search-maths/mcp_example_camel_math.py
+      environment:
+        - name: "API_KEY"
+          from: "OPENAI_API_KEY"
+
+  interface:
+    options:
+      - name: "OPENAI_API_KEY"
+        type: "string"
+        description: "OpenAI API Key"
+    runtime:
+      type: "executable"
+      command:
+        - bash
+        - examples/camel-search-maths/venv.sh
+        - examples/camel-search-maths/mcp_example_camel_interface.py
+      environment:
+        - name: "API_KEY"
+          from: "OPENAI_API_KEY"
+
+  voice_interface_agent:
+    options: []
+    runtime:
+      type: executable
+      command:
+        - bash
+        - -c
+        - |
+          exec python main.py livekit
+
+  ollama_agent:
+    options:
+      - name: "OLLAMA_URL"
+        type: "string"
+        description: "Base URL of your Ollama server"
+        default: "http://ollama:11434/v1"
+      - name: "MODEL"
+        type: "string"
+        description: "Ollama model name"
+        default: "llama3.2"
+    runtime:
+      type: executable
+      command:
+        - bash
+        - -c
+        - |
+          exec python /app/ollama_agent/main.py \
+            --url "${OLLAMA_URL}" \
+            --model "${MODEL}"
+
+  groq_agent:
+    options:
+      - name: "GROQ_API_KEY"
+        type: "string"
+        description: "Your Groq Cloud API key"
+    runtime:
+      type: executable
+      command:
+        - bash
+        - -c
+        - |
+          exec python /app/groq_agent/main.py \
+            --api_key "${GROQ_API_KEY}"
